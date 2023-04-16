@@ -9,7 +9,7 @@ import (
 func NewServer() *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.RequestID())
-	//e.Use(middleware.RealIP()) TODO
+	//e.Use(middleware.RealIP()) перемещён в логгер
 	e.Use(middleware.Logger())
 	//e.Use(middleware.Recover())
 	e.Use(middleware.TimeoutWithConfig(middleware.TimeoutConfig{
