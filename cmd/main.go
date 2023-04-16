@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"io/fs"
 	"io/ioutil"
 	"net/http"
+	"refactoring/internal/api/rest/handlers"
 	"strconv"
 	"time"
 )
@@ -33,33 +33,7 @@ var (
 )
 
 func main() {
-	r := chi.NewRouter()
-
-	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Logger)
-	//r.Use(middleware.Recoverer)
-	r.Use(middleware.Timeout(60 * time.Second))
-
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(time.Now().String()))
-	})
-
-	r.Route("/api", func(r chi.Router) {
-		r.Route("/v1", func(r chi.Router) {
-			r.Route("/users", func(r chi.Router) {
-				r.Get("/", searchUsers)
-				r.Post("/", createUser)
-
-				r.Route("/{id}", func(r chi.Router) {
-					r.Get("/", getUser)
-					r.Patch("/", updateUser)
-					r.Delete("/", deleteUser)
-				})
-			})
-		})
-	})
-
+	r := handlers.NewRouter()
 	http.ListenAndServe(":3333", r)
 }
 
