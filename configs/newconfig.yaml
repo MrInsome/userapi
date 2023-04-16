@@ -1,0 +1,8 @@
+project: "server"
+
+server:
+  rest-port: ":3333"
+
+store:
+  name: "users.json"
+  directory: "."

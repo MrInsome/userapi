@@ -1,16 +1,17 @@
 package main
 
 import (
-	"errors"
+	"fmt"
 	"net/http"
 	"refactoring/internal/api/rest/handlers"
-)
-
-var (
-	UserNotFound = errors.New("user_not_found")
+	config2 "refactoring/internal/config"
 )
 
 func main() {
+	config, err := config2.Init("newconfig")
+	if err != nil {
+		fmt.Errorf("Не смог найти конфиг")
+	}
 	r := handlers.NewRouter()
-	http.ListenAndServe(":3333", r)
+	http.ListenAndServe(config.RestPort, r)
 }
