@@ -4,22 +4,33 @@ import (
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"refactoring/internal/api/rest"
-	"refactoring/internal/data"
+	"refactoring/internal/config"
+	"refactoring/internal/services"
 	"time"
 )
 
-func NewRouter() *echo.Echo {
+type Routing struct {
+	echorouter *echo.Echo
+	service    *services.Service
+	config     *config.Configs
+}
+
+func NewRouter(service *services.Service, config *config.Configs) *Routing {
+	return &Routing{service: service, config: config}
+}
+
+func (r *Routing) Start() *echo.Echo {
 	e := rest.NewServer()
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, time.Now().String())
 	})
 
-	e.GET("/api/v1/users", data.SearchUsers)
-	e.POST("/api/v1/users", data.CreateUser)
-	e.GET("/api/v1/users/:id", data.GetUser)
-	e.PATCH("/api/v1/users/:id", data.UpdateUser)
-	e.DELETE("/api/v1/users/:id", data.DeleteUser)
+	e.GET("/api/v1/users", r.SearchUsers)
+	e.POST("/api/v1/users", r.CreateUser)
+	e.GET("/api/v1/users/:id", r.GetUser)
+	e.PATCH("/api/v1/users/:id", r.UpdateUser)
+	e.DELETE("/api/v1/users/:id", r.DeleteUser)
 
 	return e
 }
