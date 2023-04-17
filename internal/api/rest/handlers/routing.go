@@ -10,7 +10,7 @@ import (
 )
 
 type Routing struct {
-	echorouter *echo.Echo
+	echoRouter *echo.Echo
 	service    *services.Service
 	config     *config.Configs
 }
