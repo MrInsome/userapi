@@ -6,10 +6,6 @@ import (
 	"net/http"
 )
 
-var UserNotFound = map[string]string{
-	"error": "user not found",
-}
-
 type ErrResponse struct {
 	Err            error `json:"-"`
 	HTTPStatusCode int   `json:"-"`
@@ -31,4 +27,4 @@ func ErrInvalidRequest(err error) error {
 		StatusText:     "Invalid request.",
 		ErrorText:      err.Error(),
 	})
-} //todo сделать кастомные ошибки (по желанию)
+} //todo можно сделать кастомные ошибки
