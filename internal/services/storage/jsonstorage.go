@@ -6,6 +6,7 @@ import (
 	"os"
 	"refactoring/internal/config"
 	"refactoring/internal/data"
+	"sync"
 )
 
 type FileStorage struct {
@@ -16,7 +17,11 @@ func NewFileStorage(c *config.Configs) *FileStorage {
 	return &FileStorage{c}
 }
 
+var mutex = &sync.Mutex{}
+
 func (fs *FileStorage) ReadStore() (data.UserStore, error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	var store data.UserStore
 	StoreFS := http.Dir(fs.Directory)
 	_, err := StoreFS.Open(fs.Name)
@@ -38,6 +43,8 @@ func (fs *FileStorage) ReadStore() (data.UserStore, error) {
 }
 
 func (fs *FileStorage) WriteStore(store data.UserStore) error {
+	mutex.Lock()
+	defer mutex.Unlock()
 	file, err := json.Marshal(store)
 	if err != nil {
 		return err
